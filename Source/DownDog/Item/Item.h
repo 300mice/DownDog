@@ -32,4 +32,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Components")
 	UAbilitySystemComponent* ASC;
 
+	UFUNCTION(BlueprintCallable, Category = "Item")
+	FVector GetClosestHandle(FVector InLocation);
+
 };

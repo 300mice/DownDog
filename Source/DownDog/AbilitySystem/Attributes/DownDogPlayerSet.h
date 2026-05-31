@@ -25,6 +25,7 @@ public:
 	ATTRIBUTE_ACCESSORS(UDownDogPlayerSet, Stamina);
 	ATTRIBUTE_ACCESSORS(UDownDogPlayerSet, MaxStamina);
 	ATTRIBUTE_ACCESSORS(UDownDogPlayerSet, StaminaRegeneration);
+	ATTRIBUTE_ACCESSORS(UDownDogPlayerSet, CarryingCapacity);
 
 	// Delegate when health changes due to damage/healing, some information may be missing on the client
 	mutable FDownDogAttributeEvent OnHealthChanged;
@@ -41,6 +42,8 @@ public:
 	mutable FDownDogAttributeEvent OnStaminaChanged;
 	mutable FDownDogAttributeEvent OnMaxStaminaChanged;
 	mutable FDownDogAttributeEvent OnStaminaRegenerationChanged;
+
+	mutable FDownDogAttributeEvent OnCarryingCapacityChanged;
 
 
 
@@ -62,6 +65,10 @@ protected:
 	void OnRep_MaxStamina(const FGameplayAttributeData& OldValue);
 	UFUNCTION()
 	void OnRep_StaminaRegeneration(const FGameplayAttributeData& OldValue);
+
+	//Capacity Rep
+	UFUNCTION()
+	void OnRep_CarryingCapacity(const FGameplayAttributeData& OldValue);
 	
 
 	virtual bool PreGameplayEffectExecute(struct FGameplayEffectModCallbackData& Data) override;
@@ -96,6 +103,10 @@ private:
 	// The rate at which stamina regenerates attribute.
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_StaminaRegeneration, Category = "DownDog|Movement", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData StaminaRegeneration;
+
+	// The rate at which stamina regenerates attribute.
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CarryingCapacity, Category = "DownDog|Movement", Meta = (AllowPrivateAccess = true))
+	FGameplayAttributeData CarryingCapacity;
 
 	// Used to track when the health reaches 0.
 	bool bOutOfHealth;

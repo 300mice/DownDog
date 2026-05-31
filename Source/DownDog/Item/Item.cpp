@@ -4,6 +4,7 @@
 #include "Item.h"
 
 #include "AbilitySystemComponent.h"
+#include "AnchorLocation.h"
 #include "HandleLocation.h"
 
 // Sets default values
@@ -11,6 +12,9 @@ AItem::AItem()
 {
 	ItemMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Item Mesh"));
 	SetRootComponent(ItemMesh);
+	ItemMesh->SetSimulatePhysics(true);
+	ItemMesh->SetAngularDamping(2.5f);
+	ItemMesh->SetLinearDamping(0.4f);
 	
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -18,7 +22,9 @@ AItem::AItem()
 	ASC = CreateDefaultSubobject<UAbilitySystemComponent>("ASC");
 	ASC->SetIsReplicated(true);
 	ASC->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
-
+	
+	bReplicates = true;
+	this->AActor::SetReplicateMovement(true);
 }
 
 // Called when the game starts or when spawned
@@ -28,22 +34,44 @@ void AItem::BeginPlay()
 	ASC->InitAbilityActorInfo(this, this);
 }
 
-FVector AItem::GetClosestHandle(FVector InLocation)
+UAnchorLocation* AItem::GetClosestAnchor(FVector InLocation)
 {
-	TArray<TObjectPtr<UHandleLocation>> HandleLocations;
-	GetComponents<UHandleLocation>(HandleLocations);
-	FVector OutLocation = FVector::ZeroVector;
-	float MinDistance = 10000;
+	TArray<TObjectPtr<UAnchorLocation>> AnchorLocations;
+	GetComponents<UAnchorLocation>(AnchorLocations);
+	UAnchorLocation* OutAnchor = nullptr;
+	float MinDistance = 100000;
 
-	for (const UHandleLocation* Handle : HandleLocations)
+	for (UAnchorLocation* Anchor : AnchorLocations)
 	{
-		FVector HandleLocation = Handle->GetComponentLocation();
+		FVector HandleLocation = Anchor->GetComponentLocation();
 		if (float Distance = (InLocation - HandleLocation).Size(); Distance < MinDistance)
 		{
 			MinDistance = Distance;
-			OutLocation = HandleLocation;
+			OutAnchor = Anchor;
 		}
 	}
-	return OutLocation;
+	return OutAnchor;
 }
+
+USceneComponent* AItem::GetClosestHandle(FVector InLocation)
+{
+	UAnchorLocation* Anchor = GetClosestAnchor(InLocation);
+	TArray<USceneComponent*> Handles;
+	Anchor->GetChildrenComponents(false, Handles);
+	USceneComponent* OutHandle = nullptr;
+	float MinDistance = 100000;
+
+	for (USceneComponent* Handle : Handles)
+	{
+		FVector HandleLocation = Handle->GetComponentLocation();
+		if (float Distance = (Handle->GetComponentLocation() - InLocation).Size(); Distance < MinDistance)
+		{
+			MinDistance = Distance;
+			OutHandle = Handle;
+		}
+	}
+	return OutHandle;
+}
+
+
 

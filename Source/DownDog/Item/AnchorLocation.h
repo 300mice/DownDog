@@ -3,23 +3,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/BillboardComponent.h"
-#include "HandleLocation.generated.h"
+#include "Components/SceneComponent.h"
+#include "AnchorLocation.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class DOWNDOG_API UHandleLocation : public UBillboardComponent
+class DOWNDOG_API UAnchorLocation : public USceneComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UHandleLocation();
+	UAnchorLocation();
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HandleLocation")
-	bool bShowDebug = false;
 };

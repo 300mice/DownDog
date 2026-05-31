@@ -45,23 +45,43 @@ void UGASWidget::ResetAbilitySystem()
 
 void UGASWidget::RegisterAbilitySystemDelegates()
 {
-	if (!AbilitySystemComponent)
-	{
-		// Ability System may not have been available yet for character (PlayerState setup on clients)
-		return;
-	}
+	if (!AbilitySystemComponent) return;
 
-	
+	// Register current attributes
+	RegisterAttributeDelegates();
+
+	// Listen for new GEs being applied (which may grant new attribute sets)
+	AbilitySystemComponent->OnGameplayEffectAppliedDelegateToSelf.AddUObject(
+		this, &UGASWidget::OnGameplayEffectApplied);
+}
+
+void UGASWidget::RegisterAttributeDelegates()
+{
+	if (!AbilitySystemComponent) return;
+
 	TArray<FGameplayAttribute> Attributes;
 	AbilitySystemComponent->GetAllAttributes(Attributes);
 
 	for (FGameplayAttribute Attribute : Attributes)
 	{
-		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Attribute).AddUObject(this, &UGASWidget::OnAttributeChange);
+		FOnGameplayAttributeValueChange& Delegate = 
+			AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Attribute);
+
+		// Only bind if not already bound to avoid duplicate callbacks
+		if (!Delegate.IsBoundToObject(this))
+		{
+			Delegate.AddUObject(this, &UGASWidget::OnAttributeChange);
+		}
 	}
-	
-	// // Handle generic GameplayTags added / removed
-	// AbilitySystemComponent->RegisterGenericGameplayTagEvent().AddUObject(this, &UCorsicanGASWidget::OnGameplayTagChange);
+}
+
+void UGASWidget::OnGameplayEffectApplied(
+	UAbilitySystemComponent* ASC,
+	const FGameplayEffectSpec& Spec,
+	FActiveGameplayEffectHandle Handle)
+{
+	// Re-register all attributes - will pick up any newly added attribute sets
+	RegisterAttributeDelegates();
 }
 
 float UGASWidget::GetAttributeValue(FGameplayAttribute Attribute) const

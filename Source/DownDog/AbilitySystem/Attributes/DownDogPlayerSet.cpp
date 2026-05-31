@@ -9,6 +9,9 @@ UDownDogPlayerSet::UDownDogPlayerSet()
 	: Health(100.0f)
 	, MaxHealth(100.0f)
 	, MovementSpeed( 600.0f)
+	, Stamina(100)
+	, MaxStamina(100)
+	, StaminaRegeneration(1)
 {
 	bOutOfHealth = false;
 	MaxHealthBeforeAttributeChange = 0.0f;
@@ -55,6 +58,21 @@ void UDownDogPlayerSet::OnRep_MovementSpeed(const FGameplayAttributeData& OldVal
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UDownDogPlayerSet, MovementSpeed, OldValue);
 }
 
+void UDownDogPlayerSet::OnRep_Stamina(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UDownDogPlayerSet, Stamina, OldValue);
+}
+
+void UDownDogPlayerSet::OnRep_MaxStamina(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UDownDogPlayerSet, MaxStamina, OldValue);
+}
+
+void UDownDogPlayerSet::OnRep_StaminaRegeneration(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UDownDogPlayerSet, StaminaRegeneration, OldValue);
+}
+
 bool UDownDogPlayerSet::PreGameplayEffectExecute(FGameplayEffectModCallbackData& Data)
 {
 	HealthBeforeAttributeChange = GetHealth();
@@ -98,6 +116,24 @@ void UDownDogPlayerSet::PostAttributeChange(const FGameplayAttribute& Attribute,
 		}
 	}
 
+	if (Attribute == GetMaxStaminaAttribute())
+	{
+		UAbilitySystemComponent* LyraASC = GetAbilitySystemComponent();
+		check(LyraASC);
+
+		//When we gain max health, heal for that amount as well 
+		if (GetStamina() < NewValue)
+		{
+			LyraASC->ApplyModToAttribute(GetStaminaAttribute(), EGameplayModOp::Additive, NewValue - OldValue);
+		}
+
+		// Make sure current health is not greater than the new max health.
+		if (GetStamina() > NewValue)
+		{
+			LyraASC->ApplyModToAttribute(GetStaminaAttribute(), EGameplayModOp::Override, NewValue);
+		}
+	}
+
 	if (bOutOfHealth && (GetHealth() > 0.0f))
 	{
 		bOutOfHealth = false;
@@ -118,6 +154,21 @@ void UDownDogPlayerSet::ClampAttribute(const FGameplayAttribute& Attribute, floa
 	}
 	else if (Attribute == GetMovementSpeedAttribute())
 	{
+		NewValue = FMath::Max(NewValue, 0.0f);
+	}
+	else if (Attribute == GetStaminaAttribute())
+	{
+		// Do not allow health to go negative or above max health.
+		NewValue = FMath::Clamp(NewValue, 0.0f, GetMaxHealth());
+	}
+	else if (Attribute == GetMaxStaminaAttribute())
+	{
+		// Do not allow max health to drop below 1.
+		NewValue = FMath::Max(NewValue, 1.0f);
+	}
+	else if (Attribute == GetStaminaRegenerationAttribute())
+	{
+		// Do not allow max health to drop below 1.
 		NewValue = FMath::Max(NewValue, 0.0f);
 	}
 }

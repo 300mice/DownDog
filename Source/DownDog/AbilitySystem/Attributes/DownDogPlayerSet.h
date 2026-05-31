@@ -22,6 +22,9 @@ public:
 	ATTRIBUTE_ACCESSORS(UDownDogPlayerSet, Health);
 	ATTRIBUTE_ACCESSORS(UDownDogPlayerSet, MaxHealth);
 	ATTRIBUTE_ACCESSORS(UDownDogPlayerSet, MovementSpeed);
+	ATTRIBUTE_ACCESSORS(UDownDogPlayerSet, Stamina);
+	ATTRIBUTE_ACCESSORS(UDownDogPlayerSet, MaxStamina);
+	ATTRIBUTE_ACCESSORS(UDownDogPlayerSet, StaminaRegeneration);
 
 	// Delegate when health changes due to damage/healing, some information may be missing on the client
 	mutable FDownDogAttributeEvent OnHealthChanged;
@@ -35,15 +38,31 @@ public:
 	// Delegate when max health changes
 	mutable FDownDogAttributeEvent OnMovementSPeedChanged;
 
+	mutable FDownDogAttributeEvent OnStaminaChanged;
+	mutable FDownDogAttributeEvent OnMaxStaminaChanged;
+	mutable FDownDogAttributeEvent OnStaminaRegenerationChanged;
+
+
+
 protected:
+	//Health Rep
 	UFUNCTION()
 	void OnRep_Health(const FGameplayAttributeData& OldValue);
-
 	UFUNCTION()
 	void OnRep_MaxHealth(const FGameplayAttributeData& OldValue);
 
+	//Movement Rep
 	UFUNCTION()
 	void OnRep_MovementSpeed(const FGameplayAttributeData& OldValue);
+
+	//Stamina Rep
+	UFUNCTION()
+	void OnRep_Stamina(const FGameplayAttributeData& OldValue);
+	UFUNCTION()
+	void OnRep_MaxStamina(const FGameplayAttributeData& OldValue);
+	UFUNCTION()
+	void OnRep_StaminaRegeneration(const FGameplayAttributeData& OldValue);
+	
 
 	virtual bool PreGameplayEffectExecute(struct FGameplayEffectModCallbackData& Data) override;
 
@@ -65,6 +84,18 @@ private:
 	// The current movement speed attribute.
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MovementSpeed, Category = "DownDog|Movement", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData MovementSpeed;
+
+	// The current stamina attribute.
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Stamina, Category = "DownDog|Movement", Meta = (AllowPrivateAccess = true))
+	FGameplayAttributeData Stamina;
+
+	// The maximum stamina attribute.
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxStamina, Category = "DownDog|Movement", Meta = (AllowPrivateAccess = true))
+	FGameplayAttributeData MaxStamina;
+
+	// The rate at which stamina regenerates attribute.
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_StaminaRegeneration, Category = "DownDog|Movement", Meta = (AllowPrivateAccess = true))
+	FGameplayAttributeData StaminaRegeneration;
 
 	// Used to track when the health reaches 0.
 	bool bOutOfHealth;

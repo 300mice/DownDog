@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "GASWidget.generated.h"
 
+struct FActiveGameplayEffectHandle;
+struct FGameplayEffectSpec;
 struct FGameplayAttribute;
 struct FGameplayTag;
 struct FOnAttributeChangeData;
@@ -47,6 +49,9 @@ protected:
 	
 	/** Register listeners for AbilitySystemComponent (Attributes, GameplayEffects / Tags, Cooldowns, ...) */
 	virtual void RegisterAbilitySystemDelegates();
+
+	/** Register listeners for AbilitySystemComponent (Attributes, GameplayEffects / Tags, Cooldowns, ...) */
+	virtual void RegisterAttributeDelegates();
 	
 	/** Returns the current value of an attribute (base value) from owning actor Ability System (if it has any). That is, the value of the attribute with no stateful modifiers */
 	UFUNCTION(BlueprintCallable, Category="GAS|UI")
@@ -78,6 +83,8 @@ protected: // Event handling
 	void K2_OnGameplayTagChange(FGameplayTag GameplayTag, int32 NewTagCount);
 
 	virtual void NativeDestruct() override;
+
+	void OnGameplayEffectApplied(UAbilitySystemComponent* ASC, const FGameplayEffectSpec& Spec, FActiveGameplayEffectHandle Handle);
 	
 protected:
 	UPROPERTY(BlueprintReadOnly, Category="GAS|UI")

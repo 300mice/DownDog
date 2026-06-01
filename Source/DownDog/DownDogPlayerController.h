@@ -63,4 +63,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category="Input")
 	UInputConfig* InputConfig;
+
+	virtual void OnRep_PlayerState() override;
 };

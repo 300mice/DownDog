@@ -43,11 +43,11 @@
 			"Enabled": true
 		},
 		{
-			"Name": "SteamSockets",
+			"Name": "GameplayAbilities",
 			"Enabled": true
 		},
 		{
-			"Name": "GameplayAbilities",
+			"Name": "SteamSockets",
 			"Enabled": true
 		}
 	]

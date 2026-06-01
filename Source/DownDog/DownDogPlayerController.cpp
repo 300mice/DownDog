@@ -21,7 +21,10 @@ ADownDogPlayerController::ADownDogPlayerController()
 void ADownDogPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
+	if (IsLocalPlayerController() && HasAuthority())
+	{
+		StartTalking();
+	}
 	
 	// only spawn touch controls on local player controllers
 	if (ShouldUseTouchControls() && IsLocalPlayerController())
@@ -139,5 +142,14 @@ void ADownDogPlayerController::Input_AbilityInputTagReleased(FGameplayTag InputT
 			// This sets Spec->InputPressed = false AND fires InputReleased replication event
 			DownDogCharacter->ASC->AbilityLocalInputReleased(Spec->InputID);
 		}
+	}
+}
+
+void ADownDogPlayerController::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+	if (IsLocalPlayerController())
+	{
+		StartTalking();
 	}
 }

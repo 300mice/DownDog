@@ -6,6 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "AnchorLocation.h"
 #include "HandleLocation.h"
+#include "AbilitySystem/Attributes/DownDogItemSet.h"
 
 // Sets default values
 AItem::AItem()
@@ -32,6 +33,11 @@ void AItem::BeginPlay()
 {
 	Super::BeginPlay();
 	ASC->InitAbilityActorInfo(this, this);
+	const UDownDogItemSet* ItemAttributeSet = Cast<UDownDogItemSet>(ASC->GetAttributeSet(UDownDogItemSet::StaticClass()));
+	if (ItemAttributeSet)
+	{
+		ItemMesh->SetMassOverrideInKg("NAME_None", ItemAttributeSet->GetWeight());
+	}
 }
 
 UAnchorLocation* AItem::GetClosestAnchor(FVector InLocation)

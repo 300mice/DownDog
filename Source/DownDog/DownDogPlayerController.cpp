@@ -21,11 +21,6 @@ ADownDogPlayerController::ADownDogPlayerController()
 void ADownDogPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	if (IsLocalPlayerController() && HasAuthority())
-	{
-		StartTalking();
-	}
-	
 	// only spawn touch controls on local player controllers
 	if (ShouldUseTouchControls() && IsLocalPlayerController())
 	{
@@ -42,7 +37,6 @@ void ADownDogPlayerController::BeginPlay()
 			UE_LOG(LogDownDog, Error, TEXT("Could not spawn mobile controls widget."));
 
 		}
-
 	}
 }
 

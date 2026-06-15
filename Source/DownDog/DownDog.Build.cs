@@ -21,7 +21,8 @@ public class DownDog : ModuleRules
 			"Slate",
 			"GameplayAbilities",
 			"GameplayTasks",
-			"GameplayTags"
+			"GameplayTags",
+			"Mover"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[]

@@ -180,6 +180,9 @@ private:
 	virtual void DoAim(float Yaw, float Pitch);
 
 	uint8 bHasProduceInputinBpFunc : 1;
+
+	UFUNCTION(Server,UnReliable)
+	void ServerUpdateControlRotation(FRotator NewRotation);
 	
 
 };

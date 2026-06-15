@@ -55,6 +55,7 @@ void ADownDogCharacter::OnProduceInput(float DeltaMs, FMoverInputCmdContext& Inp
 	if (PC)
 	{
 		CharacterInputs.ControlRotation = PC->GetControlRotation();
+		ServerUpdateControlRotation(CharacterInputs.ControlRotation); // Unreliable RPC
 	}
 
 	bool bRequestedNavMovement = false;
@@ -306,6 +307,14 @@ void ADownDogCharacter::DoAim(float Yaw, float Pitch)
 		// pass the rotation inputs
 		AddControllerYawInput(Yaw);
 		AddControllerPitchInput(Pitch);
+	}
+}
+
+void ADownDogCharacter::ServerUpdateControlRotation_Implementation(FRotator NewRotation)
+{
+	if (AController* C = GetController())
+	{
+		C->SetControlRotation(NewRotation);
 	}
 }
 

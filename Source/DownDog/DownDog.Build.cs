@@ -31,7 +31,9 @@ public class DownDog : ModuleRules
 			"Slate",
 			"SlateCore",
 			"Projects",
-			"Chaos"
+			"Chaos", 
+			"OnlineSubsystem",
+			"OnlineSubsystemUtils"
 		});
 
 		PublicIncludePaths.AddRange(new string[] {

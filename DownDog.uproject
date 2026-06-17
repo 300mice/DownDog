@@ -14,7 +14,8 @@
 				"UMG",
 				"CoreUObject",
 				"EnhancedInput",
-				"GameplayAbilities"
+				"GameplayAbilities",
+				"ChaosMover"
 			]
 		}
 	],

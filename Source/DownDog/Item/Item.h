@@ -24,6 +24,11 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Item")
 	UAnchorLocation* GetClosestAnchor(FVector InLocation);
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Item")
+    FVector GetClosestAnchorLocation(FVector InLocation);
+
+	UStaticMeshComponent* GetMesh(){return ItemMesh;}
 
 protected:
 	// Called when the game starts or when spawned

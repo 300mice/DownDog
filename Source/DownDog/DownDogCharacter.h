@@ -8,7 +8,9 @@
 #include "DefaultMovementSet/CharacterMoverComponent.h"
 #include "DefaultMovementSet/NavMoverComponent.h"
 #include "GameFramework/Pawn.h"
+#include "Item/Item.h"
 #include "Logging/LogMacros.h"
+#include "Mover/DownDogChaosMoverComponent.h"
 #include "DownDogCharacter.generated.h"
 
 struct FAbilitySet_GrantedHandles;
@@ -53,6 +55,9 @@ protected:
 	/** Holds functionality for nav movement data and functions */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Transient, Category="Nav Movement")
 	TObjectPtr<UNavMoverComponent> NavMoverComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Transient, Category="Mover")
+	TObjectPtr<UDownDogChaosMoverComponent> DownDogChaosMoverComponent;
 
 	//MOVEMENT
 protected:
@@ -183,6 +188,19 @@ private:
 
 	UFUNCTION(Server,UnReliable)
 	void ServerUpdateControlRotation(FRotator NewRotation);
+
+
+	// Carrying
+public:
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category= "Item")
+	AItem* GetHeldItem(){return HeldItem;}
+
+	UFUNCTION(BlueprintCallable, Category= "Item")
+	void SetHeldItem(AItem* NewItem);
+
+private:
+	UPROPERTY()
+	TObjectPtr<AItem> HeldItem = nullptr;
 	
 
 };

@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Mover/DownDogWalkingMode.h"
+#include "DownDogWalkingMode.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
-#include "DownDogChaosMoverComponent.h"
+#include "Mover/DownDogChaosMoverComponent.h"
 #include "AbilitySystem/Attributes/DownDogPlayerSet.h"
 
 class UDownDogPlayerSet;

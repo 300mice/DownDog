@@ -59,6 +59,25 @@ UAnchorLocation* AItem::GetClosestAnchor(FVector InLocation)
 	return OutAnchor;
 }
 
+FVector AItem::GetClosestAnchorLocation(FVector InLocation)
+{
+	TArray<TObjectPtr<UAnchorLocation>> AnchorLocations;
+	GetComponents<UAnchorLocation>(AnchorLocations);
+	UAnchorLocation* OutAnchor = nullptr;
+	float MinDistance = 100000;
+
+	for (UAnchorLocation* Anchor : AnchorLocations)
+	{
+		FVector HandleLocation = Anchor->GetComponentLocation();
+		if (float Distance = (InLocation - HandleLocation).Size(); Distance < MinDistance)
+		{
+			MinDistance = Distance;
+			OutAnchor = Anchor;
+		}
+	}
+	return OutAnchor->GetComponentLocation();
+}
+
 USceneComponent* AItem::GetClosestHandle(FVector InLocation)
 {
 	UAnchorLocation* Anchor = GetClosestAnchor(InLocation);

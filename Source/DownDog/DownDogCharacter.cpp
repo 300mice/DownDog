@@ -203,6 +203,8 @@ ADownDogCharacter::ADownDogCharacter(const class FObjectInitializer& ObjectIniti
 	FirstPersonCameraComponent->FirstPersonFieldOfView = 70.0f;
 	FirstPersonCameraComponent->FirstPersonScale = 0.6f;
 
+	DownDogChaosMoverComponent = CreateDefaultSubobject<UDownDogChaosMoverComponent>("DDChaosMover");
+
 	
 
 	
@@ -308,6 +310,11 @@ void ADownDogCharacter::DoAim(float Yaw, float Pitch)
 		AddControllerYawInput(Yaw);
 		AddControllerPitchInput(Pitch);
 	}
+}
+
+void ADownDogCharacter::SetHeldItem(AItem* NewItem)
+{
+	HeldItem = NewItem;
 }
 
 void ADownDogCharacter::ServerUpdateControlRotation_Implementation(FRotator NewRotation)

@@ -26,6 +26,7 @@ public:
 	ATTRIBUTE_ACCESSORS(UDownDogPlayerSet, MaxStamina);
 	ATTRIBUTE_ACCESSORS(UDownDogPlayerSet, StaminaRegeneration);
 	ATTRIBUTE_ACCESSORS(UDownDogPlayerSet, CarryingCapacity);
+	ATTRIBUTE_ACCESSORS(UDownDogPlayerSet, CarryHeight);
 
 	// Delegate when health changes due to damage/healing, some information may be missing on the client
 	mutable FDownDogAttributeEvent OnHealthChanged;
@@ -69,6 +70,8 @@ protected:
 	//Capacity Rep
 	UFUNCTION()
 	void OnRep_CarryingCapacity(const FGameplayAttributeData& OldValue);
+	UFUNCTION()
+	void OnRep_CarryHeight(const FGameplayAttributeData& OldValue);
 	
 
 	virtual bool PreGameplayEffectExecute(struct FGameplayEffectModCallbackData& Data) override;
@@ -107,6 +110,10 @@ private:
 	// The rate at which stamina regenerates attribute.
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CarryingCapacity, Category = "DownDog|Movement", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData CarryingCapacity;
+
+	// The height at which you carry objects.
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CarryHeight, Category = "DownDog|Movement", Meta = (AllowPrivateAccess = true))
+	FGameplayAttributeData CarryHeight;
 
 	// Used to track when the health reaches 0.
 	bool bOutOfHealth;

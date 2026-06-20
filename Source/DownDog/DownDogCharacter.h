@@ -133,19 +133,6 @@ public:
 	// Whether or not we author our movement inputs relative to whatever base we're standing on, or leave them in world space. Only applies if standing on a base of some sort.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MoverExamples)
 	bool bUseBaseRelativeMovement = true;
-	
-	/**
-	 * If true, rotate the Character toward the direction the actor is moving
-	 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MoverExamples)
-	bool bOrientRotationToMovement = true;
-	
-	/**
-	 * If true, the actor will continue orienting towards the last intended orientation (from input) even after movement intent input has ceased.
-	 * This makes the character finish orienting after a quick stick flick from the player.  If false, character will not turn without input.
-	 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MoverExamples)
-	bool bMaintainLastInputOrientation = false;
 
 	// Extra Components
 public:

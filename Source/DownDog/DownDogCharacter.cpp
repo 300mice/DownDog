@@ -92,26 +92,7 @@ void ADownDogCharacter::OnProduceInput(float DeltaMs, FMoverInputCmdContext& Inp
 	CharacterInputs.OrientationIntent = FVector::ZeroVector;
 
 
-	if (bHasAffirmativeMoveInput)
-	{
-		if (bOrientRotationToMovement)
-		{
-			// set the intent to the actors movement direction
-			CharacterInputs.OrientationIntent = CharacterInputs.GetMoveInput().GetSafeNormal();
-		}
-		else
-		{
-			// set intent to the the control rotation - often a player's camera rotation
-			CharacterInputs.OrientationIntent = CharacterInputs.ControlRotation.Vector().GetSafeNormal();
-		}
-
-		LastAffirmativeMoveInput = CharacterInputs.GetMoveInput();
-	}
-	else if (bMaintainLastInputOrientation)
-	{
-		// There is no movement intent, so use the last-known affirmative move input
-		CharacterInputs.OrientationIntent = LastAffirmativeMoveInput;
-	}
+	CharacterInputs.OrientationIntent = CharacterInputs.ControlRotation.Vector().GetSafeNormal();
 	
 	CharacterInputs.bIsJumpPressed = bIsJumpPressed;
 	CharacterInputs.bIsJumpJustPressed = bIsJumpJustPressed;

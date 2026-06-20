@@ -13,6 +13,7 @@ UDownDogPlayerSet::UDownDogPlayerSet()
 	, MaxStamina(100)
 	, StaminaRegeneration(1)
 	, CarryingCapacity(175)
+	, CarryHeight(0)
 {
 	bOutOfHealth = false;
 	MaxHealthBeforeAttributeChange = 0.0f;
@@ -32,6 +33,7 @@ void UDownDogPlayerSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME_CONDITION_NOTIFY(UDownDogPlayerSet, StaminaRegeneration, COND_None, REPNOTIFY_Always);
 
 	DOREPLIFETIME_CONDITION_NOTIFY(UDownDogPlayerSet, CarryingCapacity, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UDownDogPlayerSet, CarryHeight, COND_None, REPNOTIFY_Always);
 }
 
 void UDownDogPlayerSet::OnRep_Health(const FGameplayAttributeData& OldValue)
@@ -83,6 +85,11 @@ void UDownDogPlayerSet::OnRep_StaminaRegeneration(const FGameplayAttributeData& 
 void UDownDogPlayerSet::OnRep_CarryingCapacity(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UDownDogPlayerSet, CarryingCapacity, OldValue);
+}
+
+void UDownDogPlayerSet::OnRep_CarryHeight(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UDownDogPlayerSet, CarryHeight, OldValue);
 }
 
 bool UDownDogPlayerSet::PreGameplayEffectExecute(FGameplayEffectModCallbackData& Data)
